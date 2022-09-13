@@ -11,7 +11,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.8
+          python-version: 3.9
  
       - name: Install Python lint libraries
         run: |
@@ -28,9 +28,9 @@ jobs:
           black .
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'Auto Fixes: Code formatted'
+          commit_message: 'PyLint Auto Fixes'
           commit_options: '--no-verify'
           repository: .
-          commit_user_name: InukaaAith
-          commit_user_email: inukaasith7@gmail.com
-          commit_author: InukaAsith <inukaasith7@gmail.com>
+          commit_user_name: Hunter-XD
+          commit_user_email: 85411336+Hunter-XD@users.noreply.github.com
+          commit_author: Hunter-XD <85411336+Hunter-XD@users.noreply.github.com>

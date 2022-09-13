@@ -1,28 +1,12 @@
-# Daisyxmusic (Telegram bot project )
-# Copyright (C) 2021  Inukaasith
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-from pyrogram import Client
-import asyncio
-from DaisyXMusic.config import SUDO_USERS, PMPERMIT
-from pyrogram import filters
+from pyrogram import Client, filters
 from pyrogram.types import Message
-from DaisyXMusic.services.callsmusic.callsmusic import client as USER
 
-PMSET =True
+from DaisyXMusic.config import PMPERMIT, SUDO_USERS
+from DaisyXMusic.services.pytgcalls.pytgcalls import client as USER
+
+PMSET = True
 pchats = []
+
 
 @USER.on_message(filters.text & filters.private & ~filters.me & ~filters.bot)
 async def pmPermit(client: USER, message: Message):
@@ -37,7 +21,6 @@ async def pmPermit(client: USER, message: Message):
             )
             return
 
-    
 
 @Client.on_message(filters.command(["/pmpermit"]))
 async def bye(client: Client, message: Message):
@@ -54,15 +37,17 @@ async def bye(client: Client, message: Message):
             await message.reply_text("Pmpermit turned off")
             return
 
-@USER.on_message(filters.text & filters.private & filters.me)        
+
+@USER.on_message(filters.text & filters.private & filters.me)
 async def autopmPermiat(client: USER, message: Message):
     chat_id = message.chat.id
     if not chat_id in pchats:
         pchats.append(chat_id)
         await message.reply_text("Approoved to PM due to outgoing messages")
         return
-    message.continue_propagation()    
-    
+    message.continue_propagation()
+
+
 @USER.on_message(filters.command("a", [".", ""]) & filters.me & filters.private)
 async def pmPermiat(client: USER, message: Message):
     chat_id = message.chat.id
@@ -70,8 +55,8 @@ async def pmPermiat(client: USER, message: Message):
         pchats.append(chat_id)
         await message.reply_text("Approoved to PM")
         return
-    message.continue_propagation()    
-    
+    message.continue_propagation()
+
 
 @USER.on_message(filters.command("da", [".", ""]) & filters.me & filters.private)
 async def rmpmPermiat(client: USER, message: Message):
@@ -80,4 +65,4 @@ async def rmpmPermiat(client: USER, message: Message):
         pchats.remove(chat_id)
         await message.reply_text("Dispprooved to PM")
         return
-    message.continue_propagation()    
+    message.continue_propagation()

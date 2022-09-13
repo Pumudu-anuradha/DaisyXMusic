@@ -5,33 +5,27 @@ from pyrogram.types import Message
 from pytgcalls.types.input_stream import AudioPiped
 
 from DaisyXMusic.function.admins import set
-from DaisyXMusic.helpers.channelmusic import get_chat_id
 from DaisyXMusic.helpers.decorators import authorized_users_only, errors
-from DaisyXMusic.helpers.filters import command, other_filters
 from DaisyXMusic.services.pytgcalls import pytgcalls
 from DaisyXMusic.services.queues import queues
 
 ACTV_CALLS = []
 
 
-@Client.on_message(filters.command("adminreset"))
-async def update_admin(client, message: Message):
-    chat_id = get_chat_id(message.chat)
-    set(
-        chat_id,
-        [
-            member.user
-            for member in await message.chat.get_members(filter="administrators")
-        ],
-    )
-    await message.reply_text("❇️ Admin cache refreshed!")
-
-
-@Client.on_message(command("pause") & other_filters)
+@Client.on_message(
+    filters.command(["channelpause", "cpause"]) & filters.group & ~filters.edited
+)
 @errors
 @authorized_users_only
 async def pause(_, message: Message):
-    chat_id = get_chat_id(message.chat)
+    try:
+        conchat = await _.get_chat(message.chat.id)
+        conid = conchat.linked_chat.id
+        chid = conid
+    except:
+        await message.reply("Is chat even linked")
+        return
+    chat_id = chid
     for x in pytgcalls.active_calls:
         ACTV_CALLS.append(int(x.chat_id))
     if int(chat_id) not in ACTV_CALLS:
@@ -41,11 +35,20 @@ async def pause(_, message: Message):
         await message.reply_text("▶️ Paused!")
 
 
-@Client.on_message(command("resume") & other_filters)
+@Client.on_message(
+    filters.command(["channelresume", "cresume"]) & filters.group & ~filters.edited
+)
 @errors
 @authorized_users_only
 async def resume(_, message: Message):
-    chat_id = get_chat_id(message.chat)
+    try:
+        conchat = await _.get_chat(message.chat.id)
+        conid = conchat.linked_chat.id
+        chid = conid
+    except:
+        await message.reply("Is chat even linked")
+        return
+    chat_id = chid
     for x in pytgcalls.active_calls:
         ACTV_CALLS.append(int(x.chat_id))
     if int(chat_id) not in ACTV_CALLS:
@@ -55,11 +58,20 @@ async def resume(_, message: Message):
         await message.reply_text("⏸ Resumed!")
 
 
-@Client.on_message(command("end") & other_filters)
+@Client.on_message(
+    filters.command(["channelend", "cend"]) & filters.group & ~filters.edited
+)
 @errors
 @authorized_users_only
 async def stop(_, message: Message):
-    chat_id = get_chat_id(message.chat)
+    try:
+        conchat = await _.get_chat(message.chat.id)
+        conid = conchat.linked_chat.id
+        chid = conid
+    except:
+        await message.reply("Is chat even linked")
+        return
+    chat_id = chid
     for x in pytgcalls.active_calls:
         ACTV_CALLS.append(int(x.chat_id))
     if int(chat_id) not in ACTV_CALLS:
@@ -74,12 +86,21 @@ async def stop(_, message: Message):
         await message.reply_text("❌ Stopped streaming!")
 
 
-@Client.on_message(command("skip") & other_filters)
+@Client.on_message(
+    filters.command(["channelskip", "cskip"]) & filters.group & ~filters.edited
+)
 @errors
 @authorized_users_only
 async def skip(_, message: Message):
     global que
-    chat_id = get_chat_id(message.chat)
+    try:
+        conchat = await _.get_chat(message.chat.id)
+        conid = conchat.linked_chat.id
+        chid = conid
+    except:
+        await message.reply("Is chat even linked")
+        return
+    chat_id = chid
     for x in pytgcalls.active_calls:
         ACTV_CALLS.append(int(x.chat_id))
     if int(chat_id) not in ACTV_CALLS:
@@ -105,11 +126,21 @@ async def skip(_, message: Message):
     await message.reply_text(f"- Skipped **{skip[0]}**\n- Now Playing **{qeue[0][0]}**")
 
 
-@Client.on_message(command("mute") & other_filters)
+@Client.on_message(
+    filters.command(["channelmute", "cmute"]) & filters.group & ~filters.edited
+)
 @errors
 @authorized_users_only
 async def mute(_, message: Message):
-    chat_id = get_chat_id(message.chat)
+    global que
+    try:
+        conchat = await _.get_chat(message.chat.id)
+        conid = conchat.linked_chat.id
+        chid = conid
+    except:
+        await message.reply("Is chat even linked")
+        return
+    chat_id = chid
     result = await pytgcalls.mute_stream(chat_id)
     await message.reply_text("✅ Muted")
     if mute:
@@ -122,11 +153,21 @@ async def mute(_, message: Message):
         await message.reply_text("❌ Not in call")
 
 
-@Client.on_message(command("unmute") & other_filters)
+@Client.on_message(
+    filters.command(["channelunmute", "cunmute"]) & filters.group & ~filters.edited
+)
 @errors
 @authorized_users_only
 async def unmute(_, message: Message):
-    chat_id = get_chat_id(message.chat)
+    global que
+    try:
+        conchat = await _.get_chat(message.chat.id)
+        conid = conchat.linked_chat.id
+        chid = conid
+    except:
+        await message.reply("Is chat even linked")
+        return
+    chat_id = chid
     result = await pytgcalls.unmute_stream(chat_id)
     await message.reply_text("✅ Unmuted")
     if unmute:
@@ -139,14 +180,21 @@ async def unmute(_, message: Message):
         await message.reply_text("❌ Not in call")
 
 
-@Client.on_message(filters.command("admincache"))
+@Client.on_message(filters.command("channeladmincache"))
 @errors
 async def admincache(client, message: Message):
+    try:
+        conchat = await client.get_chat(message.chat.id)
+        conid = conchat.linked_chat.id
+        chid = conid
+    except:
+        await message.reply("Is chat even linked")
+        return
     set(
-        message.chat.id,
+        chid,
         [
             member.user
-            for member in await message.chat.get_members(filter="administrators")
+            for member in await conchat.linked_chat.get_members(filter="administrators")
         ],
     )
     await message.reply_text("❇️ Admin cache refreshed!")

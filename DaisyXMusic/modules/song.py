@@ -1,20 +1,3 @@
-# Daisyxmusic (Telegram bot project )
-# Copyright (C) 2021  Inukaasith
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
 from __future__ import unicode_literals
 
 import asyncio
@@ -28,7 +11,7 @@ import aiofiles
 import aiohttp
 import requests
 import wget
-import youtube_dl
+import yt_dlp
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import Message
@@ -36,7 +19,6 @@ from youtube_search import YoutubeSearch
 from youtubesearchpython import SearchVideos
 
 from DaisyXMusic.config import DURATION_LIMIT
-from DaisyXMusic.modules.play import arq
 
 
 @Client.on_message(filters.command("song") & ~filters.channel)
@@ -51,7 +33,7 @@ def song(client, message):
         query += " " + str(i)
     print(query)
     m = message.reply("🔎 Finding the song...")
-    ydl_opts = {"format": "bestaudio[ext=m4a]"}
+    ydl_opts = {"format": "bestaudio[ext=mp3]"}
     try:
         results = YoutubeSearch(query, max_results=1).to_dict()
         link = f"https://youtube.com{results[0]['url_suffix']}"
@@ -72,11 +54,11 @@ def song(client, message):
         return
     m.edit("Downloading the song ")
     try:
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=False)
             audio_file = ydl.prepare_filename(info_dict)
             ydl.process_info(info_dict)
-        rep = "**🎵 Uploaded by **"
+        rep = "**🎵 Uploaded by DaisyXMusic**"
         secmul, dur, dur_arr = 1, 0, duration.split(":")
         for i in range(len(dur_arr) - 1, -1, -1):
             dur += int(dur_arr[i]) * secmul
@@ -101,7 +83,7 @@ def song(client, message):
         print(e)
 
 
-def get_text(message: Message) -> [None, str]:
+def get_text(message: Message, str) -> str:
     text_to_return = message.text
     if message.text is None:
         return None
@@ -117,7 +99,7 @@ def get_text(message: Message) -> [None, str]:
 def humanbytes(size):
     if not size:
         return ""
-    power = 2 ** 10
+    power = 2**10
     raised_to_pow = 0
     dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
     while size > power:
@@ -163,7 +145,7 @@ async def progress(current, total, message, start, type_of_ps, file_name=None):
                 pass
 
 
-def get_user(message: Message, text: str) -> [int, str, None]:
+def get_user(message: Message, text: str) -> str:
     if text is None:
         asplit = None
     else:
@@ -261,82 +243,7 @@ is_downloading = False
 
 def time_to_seconds(time):
     stringt = str(time)
-    return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(":"))))
-
-
-@Client.on_message(filters.command("saavn") & ~filters.edited)
-async def jssong(_, message):
-    global is_downloading
-    if len(message.command) < 2:
-        await message.reply_text("/saavn requires an argument.")
-        return
-    if is_downloading:
-        await message.reply_text(
-            "Another download is in progress, try again after sometime."
-        )
-        return
-    is_downloading = True
-    text = message.text.split(None, 1)[1]
-    query = text.replace(" ", "%20")
-    m = await message.reply_text("Searching...")
-    try:
-        songs = await arq.saavn(query)
-        if not songs.ok:
-            await message.reply_text(songs.result)
-            return
-        sname = songs.result[0].song
-        slink = songs.result[0].media_url
-        ssingers = songs.result[0].singers
-        await m.edit("Downloading")
-        song = await download_song(slink)
-        await m.edit("Uploading")
-        await message.reply_audio(audio=song, title=sname, performer=ssingers)
-        os.remove(song)
-        await m.delete()
-    except Exception as e:
-        is_downloading = False
-        await m.edit(str(e))
-        return
-    is_downloading = False
-
-
-# Deezer Music
-
-
-@Client.on_message(filters.command("deezer") & ~filters.edited)
-async def deezsong(_, message):
-    global is_downloading
-    if len(message.command) < 2:
-        await message.reply_text("/deezer requires an argument.")
-        return
-    if is_downloading:
-        await message.reply_text(
-            "Another download is in progress, try again after sometime."
-        )
-        return
-    is_downloading = True
-    text = message.text.split(None, 1)[1]
-    query = text.replace(" ", "%20")
-    m = await message.reply_text("Searching...")
-    try:
-        songs = await arq.deezer(query, 1)
-        if not songs.ok:
-            await message.reply_text(songs.result)
-            return
-        title = songs.result[0].title
-        url = songs.result[0].url
-        artist = songs.result[0].artist
-        await m.edit("Downloading")
-        song = await download_song(url)
-        await m.edit("Uploading")
-        await message.reply_audio(audio=song, title=title, performer=artist)
-        os.remove(song)
-        await m.delete()
-    except Exception as e:
-        is_downloading = False
-        await m.edit(str(e))
-        return
-    is_downloading = False
+    return sum(int(x) * 60**i for i, x in enumerate(reversed(stringt.split(":"))))
 
 
 @Client.on_message(filters.command(["vsong", "video"]))
@@ -382,7 +289,7 @@ async def ytmusic(client, message: Message):
     }
     try:
         is_downloading = True
-        with youtube_dl.YoutubeDL(opts) as ytdl:
+        with yt_dlp.YoutubeDL(opts) as ytdl:
             infoo = ytdl.extract_info(url, False)
             duration = round(infoo["duration"] / 60)
 

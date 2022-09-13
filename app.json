@@ -1,9 +1,25 @@
 {
   "name": "DaisyXMusic",
+  "logo": "https://telegra.ph/file/36ff1b571aa11df5812de.jpg",
   "description": "Open-Source bot to play songs in your Telegram's Group Voice Chat. Powered by PyTgCalls.",
-  "keywords": ["music", "voicechat", "telegram"],
+  "keywords": [
+    "music", 
+    "voicechat", 
+    "telegram"
+  ],
   "repository": "https://github.com/TeamDaisyX/DaisyXMusic",
   "stack": "container",
+  "buildpacks": [
+   {
+     "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+   },
+   {
+     "url": "heroku/python"
+   },
+   { 
+     "url": "heroku/nodejs"
+   }   
+  ],        
   "env": {
     "SESSION_NAME": {
       "description": "Pyrogram session string",
@@ -30,16 +46,11 @@
     "PROJECT_NAME": {
       "description": "Your MusicPlayer project Name.",
       "required": false,
-      "value": "DaisyXMusic v4"
+      "value": "DaisyXMusic v6"
     },
     "ASSISTANT_NAME": {
       "description": "Your MusicPlayer's assistant Username without @.",
       "required": true
-    },
-    "ARQ_API_KEY": {
-      "description": "Get from @ARQRobot.",
-      "required": false,
-      "value": "VKSSQH-SRNJYZ-MSOJAI-QALESR-ARQ"
     },    
     "BG_IMAGE": {
       "description": "BG image of bot (Use transparent one) [IGNORE].",
@@ -71,7 +82,7 @@
     "DURATION_LIMIT": {
       "description": "Max audio duration limit for downloads (minutes).",
       "required": true,
-      "value": "10"
+      "value": "300"
     }
   }
 }

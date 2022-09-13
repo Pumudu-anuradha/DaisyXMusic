@@ -1,4 +1,4 @@
-<h1 align="centre">DAISYXMUSIC V4.0 🎵</h1>
+<h1 align="center">DAISYX MUSIC V6.0 🎵</h1>
 
 ### A bot that can play music on Telegram Group and Channel Voice Chats
 #### POWERED BY [PYTGCALLS](https://github.com/pytgcalls/pytgcalls)
@@ -15,33 +15,44 @@
 - Current playback support
 - Showing track names when skipping
 - Zero downtime, Fully Stable
-- Deezer,Youtube & Saavn playback support
+- Youtube playback support
 - Settings panel
 - Control with buttons
 - Userbot auto join
 - Channel Music Play
+- Keyboard selection support for youtube play
 
 ## 🚀 Deployment
 
 ### 💜 Heroku
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/teamdaisyx/DaisyXMusic)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 Get pyrogram (p)  `SESSION` from here:
-[![Run on Repl.it](https://repl.it/badge/github/SpEcHiDe/GenerateStringSession)](https://repl.it/@SpEcHiDe/GenerateStringSession)
 
-### ⚔ Self-hosting (For Devs) 
+[![Run on Repl.it](https://repl.it/badge/github/Makoto-XD/Session-Generator)](https://replit.com/@Makoto-XD/Session-Generator)
+
+### ⚔ Self-hosting
 ```sh
-# Install Git First (apt-instll git)
+# First Upgrade Your Terminal
+$ sudo su (if terminal not have root access)
+$ cd (if terminal not have root access)
+$ apt update && apt upgrade -y
+$ apt install python ffmpeg -y
+$ curl -fssL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+$ apt install nodejs -y
+$ pip3 install -U pip
+$ npm i -g npm
+# Now Do Git Clone
 $ git clone https://github.com/TeamDaisyX/DaisyXmusic
 $ cd DaisyXMusic
 # Upgrade sources
 # Install All Requirements 
-$ pip(3) install -r requirements.txt
-# Rename example.env to local.env and fill
-$ npm i -g npm
-# Start Bot 
-$ python(3) -m DaisyXMusic
+$ pip3 install -U -r requirements.txt
+# Now Edit example.env and enter your creds
+$ cp example.env .env
+# Now start the Bot
+$ python3 -m DaisyXMusic
 ```
 
 ### Commands for Group 🛠
@@ -49,14 +60,11 @@ $ python(3) -m DaisyXMusic
 
 - `/play <song name>` - play song you requested
 - `/play <reply to audio>` - play replied file
-- `/dplay <song name>` - play song you requested via deezer
-- `/splay <song name>` - play song you requested via jio saavn
+- `/ytplay <song name>`: Directly play song via Youtube Music
 - `/playlist` - Show now playing list
 - `/current` - Show now playing
 - `/song <song name>` - download songs you want quickly
 - `/search <query>` - search videos on youtube with details
-- `/deezer <song name>` - download songs you want quickly via deezer
-- `/saavn <song name>` - download songs you want quickly via saavn
 - `/video <song name>` - download videos you want quickly
 
 #### Admins only.
@@ -65,17 +73,18 @@ $ python(3) -m DaisyXMusic
 - `/resume` - resume song play
 - `/skip` - play next song
 - `/end` - stop music play
+- `/mute` - mute song play
+- `/unmute` - unmute song play
 - `/userbotjoin` - invite assistant to your chat
 - `/userbotleave` - remove assistant from your chat
 - `/admincache` - Refresh admin list
+- `/musicplayer [on/off]` - Enable/Disable Music Player
 
 ### Commands for Channel Music Play 🛠
 For linked group admins only:
 - `/cplay <song name>` - play song you requested
 - `/cplay <reply to link>` - play replied youtube link
 - `/cplay <reply to audio>` - play replied file
-- `/cdplay <song name>` - play song you requested via deezer
-- `/csplay <song name>` - play song you requested via jio saavn
 - `/cplaylist` - Show now playing list
 - `/cccurrent` - Show now playing
 - `/cplayer` - open music player settings panel
@@ -83,6 +92,8 @@ For linked group admins only:
 - `/cresume` - resume song play
 - `/cskip` - play next song
 - `/cend` - stop music play
+- `/cmute` - mute song play
+- `/cunmute` - unmute song play
 - `/userbotjoinchannel` - invite assistant to your chat
 * channel is also can be used instead of c
 
@@ -103,11 +114,33 @@ If you donlt like to play in linked channel:
 - `.da` - disapproove someone to pm you
 + Sudo Users can execute any command in any groups
 
-### Credits
-Don't edit this part
 
-#### Special Credits
-- [Rojserbest](http://github.com/rojserbes): Callsmusic Developer
+## Special Credits
+- [Dan](https://github.com/delivrance) For [Pyrogram](https://github.com/pyrogram/pyrogram)
+- [Laky-64](https://github.com/Laky-64) For [PyTgCalls](https://github.com/pytgcalls/pytgcalls)
 
-This bot is based on the original work done by [Rojserbest](http://github.com/rojserbest). Without his hardwork daisyxmusic won't exist. 
-DaisyXmusic is a modified version of [Callsmusic](https://github.com/callsmusic/callsmusic) for fit the needs of @DaisyXbot users
+### Inspiration
+- [Callsmusic](http://github.com/callsmusic/callsmusic)
+- [tgvc-userbot](https://github.com/callsmusic/tgvc-userbot)
+
+#### Contributors
+- [InukaAsith](https://github.com/InukaAsith): Dev / Owner
+- [lucifeermorningstar](https://github.com/lucifeermorningstar): Dev / Owner
+- [Hellboy-OP](https://github.com/hellboy-op)
+- [Roj Serbest](http://github.com/rojserbest): Developer of callsmusic 
+- [DeshadeethThisarana](https://github.com/deshadeeth-thisarana): Dev
+- [Wrench](https://github.com/EverythingSuckz/): Dev
+- [Bemro](https://github.com/bemroofficial): Dev
+- [QueenArzoo](https://github.com/QueenArzoo): Dev
+- [Anjana-Ma](https://github.com/Anjana-Ma): Dev
+- [ImJanindu](https://github.com/ImJanindu): Dev
+- [azimazizov9150](https://github.com/azimazizov9150): Contributor
+
+
+## Copyright & License 👮
+
+ - Copyright (C) 2020-present by [TeamDaisyX](github.com/teamdaisyx) ❤️️
+ - Licensed under the terms of the [MIT License](https://github.com/TeamDaisyX/DaisyXMusic/blob/master/LICENSE)
+    
+DaisyXMusic is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the MIT License as published by the Free Software Foundation.    
+## Made with ♥️ by [TeamDaisyX](https://github.com/TeamDaisyX)

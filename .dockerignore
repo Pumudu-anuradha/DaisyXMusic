@@ -1,8 +1,10 @@
-LICENSE
-README.md
-
 .env
-.gitignore
-
+*.log
 .git/
+.idea/
+str.py
+README.md
+downloads/
+raw_files/
+.gitignore
 __pycache__/
